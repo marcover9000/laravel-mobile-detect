@@ -50,4 +50,15 @@ class MobileDetect extends Facade
         app()->instance('mobile-detect', $mobileDetect);
         app()->instance('crawler-detect', $crawlerDetect);
     }
+
+    /**
+     * Set an explicit User-Agent on both detectors for the current
+     * context (e.g. inside a queued job that has no HTTP request).
+     * Every directive, device_type() and @deviceclass then honour it.
+     */
+    public static function useAgent(string $userAgent): void
+    {
+        app('mobile-detect')->setUserAgent($userAgent);
+        app('crawler-detect')->setUserAgent($userAgent);
+    }
 }

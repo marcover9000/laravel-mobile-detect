@@ -18,7 +18,10 @@
     "autoload": {
         "psr-4": {
             "Riverskies\\Laravel\\MobileDetect\\": "src/"
-        }
+        },
+        "files": [
+            "src/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
