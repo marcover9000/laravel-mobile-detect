@@ -62,7 +62,30 @@ Use the new Blade directives in your template files:
 
 `@notbot`, `@elsenotbot`, `@endnotbot` - for non-bots
 
+`@deviceclass` - echoes `mobile`, `tablet` or `desktop` (e.g. `<body class="@deviceclass">`)
+
 The usage of `@else...` directives are optional.
+
+### Outside Blade
+In controllers or middleware, use the facade (auto-discovered, no manual
+setup on Laravel 12) or the `device_type()` helper:
+
+```php
+use Riverskies\Laravel\MobileDetect\Facades\MobileDetect;
+
+if (MobileDetect::isMobile()) { /* ... */ }
+MobileDetect::is('iOS');
+
+device_type(); // 'mobile' | 'tablet' | 'desktop'
+```
+
+In a queued job or CLI context there is no request, so set the
+User-Agent explicitly (every directive, `device_type()` and
+`@deviceclass` then honour it):
+
+```php
+MobileDetect::useAgent($userAgentCapturedFromTheRequest);
+```
 
 ### Testing
 In your application's tests you can fake the detected device without
