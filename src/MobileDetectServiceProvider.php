@@ -5,12 +5,16 @@ namespace Riverskies\Laravel\MobileDetect;
 use Detection\MobileDetect;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Jaybizzle\CrawlerDetect\CrawlerDetect;
 use Riverskies\Laravel\MobileDetect\Contracts\BladeDirectiveInterface;
 use Riverskies\Laravel\MobileDetect\Directives\AndroidBladeDirective;
+use Riverskies\Laravel\MobileDetect\Directives\BotBladeDirective;
 use Riverskies\Laravel\MobileDetect\Directives\DesktopBladeDirective;
+use Riverskies\Laravel\MobileDetect\Directives\DeviceBladeDirective;
 use Riverskies\Laravel\MobileDetect\Directives\HandheldBladeDirective;
 use Riverskies\Laravel\MobileDetect\Directives\iOSBladeDirective;
 use Riverskies\Laravel\MobileDetect\Directives\MobileBladeDirective;
+use Riverskies\Laravel\MobileDetect\Directives\NotBotBladeDirective;
 use Riverskies\Laravel\MobileDetect\Directives\NotMobileBladeDirective;
 use Riverskies\Laravel\MobileDetect\Directives\NotTabletBladeDirective;
 use Riverskies\Laravel\MobileDetect\Directives\TabletBladeDirective;
@@ -37,6 +41,10 @@ class MobileDetectServiceProvider extends ServiceProvider
         $this->app->singleton('mobile-detect', function ($app) {
             return new MobileDetect;
         });
+
+        $this->app->singleton('crawler-detect', function ($app) {
+            return new CrawlerDetect;
+        });
     }
 
     /**
@@ -52,6 +60,9 @@ class MobileDetectServiceProvider extends ServiceProvider
         $this->registerDirective(new NotMobileBladeDirective($mobileDetect));
         $this->registerDirective(new AndroidBladeDirective($mobileDetect));
         $this->registerDirective(new iOSBladeDirective($mobileDetect));
+        $this->registerDirective(new DeviceBladeDirective($mobileDetect));
+        $this->registerDirective(new BotBladeDirective($mobileDetect));
+        $this->registerDirective(new NotBotBladeDirective($mobileDetect));
     }
 
     /**

@@ -38,7 +38,8 @@
     "require": {
         "php": "^8.3",
         "illuminate/support": "^12.0",
-        "mobiledetect/mobiledetectlib": "^3.74"
+        "mobiledetect/mobiledetectlib": "^3.74",
+        "jaybizzle/crawler-detect": "^1.2"
     },
     "require-dev": {
         "orchestra/testbench": "^10.0",
