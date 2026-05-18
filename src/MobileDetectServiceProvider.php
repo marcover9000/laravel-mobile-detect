@@ -63,6 +63,10 @@ class MobileDetectServiceProvider extends ServiceProvider
         $this->registerDirective(new DeviceBladeDirective($mobileDetect));
         $this->registerDirective(new BotBladeDirective($mobileDetect));
         $this->registerDirective(new NotBotBladeDirective($mobileDetect));
+
+        Blade::directive('deviceclass', function () {
+            return "<?php echo device_type(); ?>";
+        });
     }
 
     /**
