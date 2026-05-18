@@ -1,5 +1,10 @@
 # Laravel Mobile Detect
 
+[![Latest Stable Version](https://img.shields.io/packagist/v/marcover9000/laravel-mobile-detect.svg)](https://packagist.org/packages/marcover9000/laravel-mobile-detect)
+[![Total Downloads](https://img.shields.io/packagist/dt/marcover9000/laravel-mobile-detect.svg)](https://packagist.org/packages/marcover9000/laravel-mobile-detect)
+[![PHP Version](https://img.shields.io/packagist/php-v/marcover9000/laravel-mobile-detect.svg)](https://packagist.org/packages/marcover9000/laravel-mobile-detect)
+[![License](https://img.shields.io/packagist/l/marcover9000/laravel-mobile-detect.svg)](https://packagist.org/packages/marcover9000/laravel-mobile-detect)
+
 A package that enables you to use device detection right in your Blade templates. (Utilises the well-known, constantly updated [PHP mobile detection library](http://mobiledetect.net/).)
 
 > Maintained fork for Laravel 12 by Marc (`marcover9000`). Original package by Barnabas Kecskes ([riverskies](https://github.com/riverskies/laravel-mobile-detect)), MIT licensed.
