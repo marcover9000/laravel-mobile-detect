@@ -1,68 +1,61 @@
 <?php
 
-use Riverskies\Laravel\MobileDetect\Directives\NotMobileBladeDirective;
+namespace Riverskies\Laravel\MobileDetect\Tests\unit;
+
+use PHPUnit\Framework\Attributes\Test;
+use Riverskies\Laravel\MobileDetect\Tests\TestCase;
 
 class NotMobileBladeDirectiveTest extends TestCase
 {
-    /**
-     * Set up the world.
-     */
-    public function setUp()
+    #[Test]
+    public function it_renders_when_desktop(): void
     {
-        parent::setUp();
-
-        $this->setUpTemplateEngine(new NotMobileBladeDirective);
-    }
-
-    /** @test */
-    public function it_will_not_render_if_mobile()
-    {
-        $this->expectMobileDetectReturn(function($md) {
-            $md->isMobile()->willReturn(true);
-            $md->isTablet()->willReturn(false);
+        $this->mockDetector(function ($md) {
+            $md->allows(['isMobile' => false]);
         });
 
-        $html = $this->blade->view()->make('test')->render();
-
-        $this->assertEquals('', $this->clean($html));
+        $this->assertSame(
+            '<h1>Test</h1>',
+            $this->render('@notmobile<h1>Test</h1>@endnotmobile')
+        );
     }
 
-    /** @test */
-    public function it_will_render_if_tablet()
+    #[Test]
+    public function it_renders_when_tablet(): void
     {
-        $this->expectMobileDetectReturn(function($md) {
-            $md->isMobile()->willReturn(true);
-            $md->isTablet()->willReturn(true);
+        $this->mockDetector(function ($md) {
+            $md->allows(['isMobile' => true, 'isTablet' => true]);
         });
 
-        $html = $this->blade->view()->make('test')->render();
-
-        $this->assertEquals('<h1>Test</h1>', $this->clean($html));
+        $this->assertSame(
+            '<h1>Test</h1>',
+            $this->render('@notmobile<h1>Test</h1>@endnotmobile')
+        );
     }
 
-    /** @test */
-    public function it_will_render_if_desktop()
+    #[Test]
+    public function it_does_not_render_when_pure_mobile(): void
     {
-        $this->expectMobileDetectReturn(function($md) {
-            $md->isMobile()->willReturn(false);
-            $md->isTablet()->willReturn(false);
+        $this->mockDetector(function ($md) {
+            $md->allows(['isMobile' => true, 'isTablet' => false]);
         });
 
-        $html = $this->blade->view()->make('test')->render();
-
-        $this->assertEquals('<h1>Test</h1>', $this->clean($html));
+        $this->assertSame(
+            '',
+            $this->render('@notmobile<h1>Test</h1>@endnotmobile')
+        );
     }
 
-    /** @test */
-    public function it_will_display_else_if_exist_and_mobile()
+    #[Test]
+    public function it_renders_the_else_branch_when_pure_mobile(): void
     {
-        $this->expectMobileDetectReturn(function($md) {
-            $md->isMobile()->willReturn(true);
-            $md->isTablet()->willReturn(false);
+        $this->mockDetector(function ($md) {
+            $md->allows(['isMobile' => true, 'isTablet' => false]);
         });
 
-        $html = $this->blade->view()->make('test-else')->render();
-
-        $this->assertEquals('<h1>Else</h1>', $this->clean($html));
+        $this->assertSame(
+            '<h1>Else</h1>',
+            $this->render('@notmobile<h1>Test</h1>@elsenotmobile<h1>Else</h1>@endnotmobile')
+        );
     }
 }

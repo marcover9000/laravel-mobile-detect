@@ -1,52 +1,61 @@
 <?php
 
-use Riverskies\Laravel\MobileDetect\Directives\NotTabletBladeDirective;
+namespace Riverskies\Laravel\MobileDetect\Tests\unit;
+
+use PHPUnit\Framework\Attributes\Test;
+use Riverskies\Laravel\MobileDetect\Tests\TestCase;
 
 class NotTabletBladeDirectiveTest extends TestCase
 {
-    /**
-     * Set up the world.
-     */
-    public function setUp()
+    #[Test]
+    public function it_renders_when_not_tablet(): void
     {
-        parent::setUp();
-
-        $this->setUpTemplateEngine(new NotTabletBladeDirective);
-    }
-
-    /** @test */
-    public function it_will_not_render_if_tablet()
-    {
-        $this->expectMobileDetectReturn(function($md) {
-            $md->isTablet()->willReturn(true);
+        $this->mockDetector(function ($md) {
+            $md->allows(['isTablet' => false]);
         });
 
-        $html = $this->blade->view()->make('test')->render();
-
-        $this->assertEquals('', $this->clean($html));
+        $this->assertSame(
+            '<h1>Test</h1>',
+            $this->render('@nottablet<h1>Test</h1>@endnottablet')
+        );
     }
 
-    /** @test */
-    public function it_will_render_if_not_tablet()
+    #[Test]
+    public function it_does_not_render_when_tablet(): void
     {
-        $this->expectMobileDetectReturn(function($md) {
-            $md->isTablet()->willReturn(false);
+        $this->mockDetector(function ($md) {
+            $md->allows(['isTablet' => true]);
         });
 
-        $html = $this->blade->view()->make('test')->render();
-
-        $this->assertEquals('<h1>Test</h1>', $this->clean($html));
+        $this->assertSame(
+            '',
+            $this->render('@nottablet<h1>Test</h1>@endnottablet')
+        );
     }
 
-    /** @test */
-    public function it_will_display_else_if_exist_and_tablet()
+    #[Test]
+    public function it_renders_the_else_branch_when_tablet(): void
     {
-        $this->expectMobileDetectReturn(function($md) {
-            $md->isTablet()->willReturn(true);
+        $this->mockDetector(function ($md) {
+            $md->allows(['isTablet' => true]);
         });
 
-        $html = $this->blade->view()->make('test-else')->render();
+        $this->assertSame(
+            '<h1>Else</h1>',
+            $this->render('@nottablet<h1>Test</h1>@elsenottablet<h1>Else</h1>@endnottablet')
+        );
+    }
 
-        $this->assertEquals('<h1>Else</h1>', $this->clean($html));
+    #[Test]
+    public function it_renders_the_main_branch_when_not_tablet_and_else_exists(): void
+    {
+        $this->mockDetector(function ($md) {
+            $md->allows(['isTablet' => false]);
+        });
+
+        $this->assertSame(
+            '<h1>Test</h1>',
+            $this->render('@nottablet<h1>Test</h1>@elsenottablet<h1>Else</h1>@endnottablet')
+        );
     }
 }
