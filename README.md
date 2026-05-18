@@ -56,7 +56,28 @@ Use the new Blade directives in your template files:
 
 `@android`, `@elseandroid`, `@endandroid` - for Android platforms
 
+`@device('Rule')`, `@elsedevice`, `@enddevice` - for any [mobiledetect rule](https://github.com/serbanghita/Mobile-Detect) (e.g. `@device('iPhone')`, `@device('AndroidOS')`, `@device('Chrome')`)
+
+`@bot`, `@elsebot`, `@endbot` - for crawlers/bots
+
+`@notbot`, `@elsenotbot`, `@endnotbot` - for non-bots
+
 The usage of `@else...` directives are optional.
+
+### Testing
+In your application's tests you can fake the detected device without
+mocking anything:
+
+```php
+use Riverskies\Laravel\MobileDetect\Facades\MobileDetect;
+
+MobileDetect::fake('mobile');   // also: 'tablet', 'desktop', 'bot'
+MobileDetect::fake('iPhone');   // any mobiledetect rule, drives @device('iPhone')
+```
+
+The fake is scoped to the test (a fresh app per test); the presets
+`mobile`/`tablet`/`desktop`/`bot` drive the device-type and bot
+directives, a rule name drives `@device('Rule')`.
 
 ### Development
 This package ships a Docker dev environment (PHP 8.3 + Composer):
