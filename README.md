@@ -2,6 +2,8 @@
 
 A package that enables you to use device detection right in your Blade templates. (Utilises the well-known, constantly updated [PHP mobile detection library](http://mobiledetect.net/).)
 
+> Maintained fork for Laravel 12 by Marc (`marcover9000`). Original package by Barnabas Kecskes ([riverskies](https://github.com/riverskies/laravel-mobile-detect)), MIT licensed.
+
 ### When would you use this package?
 Responsive CSS may help to make content in the browser look nice on different devices but it won't help you serve responsive content from your backend (at least not the easy way). This can have a really bad knock-on effect on the user experience (have you ever waited for a large image to load while having a bad connection on your mobile?). This package will make it a breeze to serve device-specific content right from your back-end.
 
@@ -9,23 +11,15 @@ Responsive CSS may help to make content in the browser look nice on different de
 The package implements various Blade directives that you can use to serve different content from your Blade template for different device types.
 
 ### Installation
-Install the package through composer:
+Install the package through Composer:
 
 ```sh
-$ composer require riverskies/laravel-mobile-detect
+composer require marcover9000/laravel-mobile-detect
 ```
 
-### Laravel 5.4 or earlier
-Add the service provider to your **config/app.php** file:
+On Laravel 12 the service provider and the optional `MobileDetect` facade are auto-discovered — no manual registration needed.
 
-```php
-Riverskies\Laravel\MobileDetect\MobileDetectServiceProvider::class
-```
-
-Optionally, you can add an alias as well if you'd like to use the underlying instance anywhere else (or have access to all the functions):
-```php
-'MobileDetect' => Riverskies\Laravel\MobileDetect\Facades\MobileDetect::class
-```
+> **NOTE** You might have to run `php artisan view:clear` for the Blade directives to take effect.
 
 ### Usage
 Use the new Blade directives in your template files:
@@ -58,3 +52,12 @@ Use the new Blade directives in your template files:
 `@android`, `@elseandroid`, `@endandroid` - for Android platforms
 
 The usage of `@else...` directives are optional.
+
+### Development
+This package ships a Docker dev environment (PHP 8.3 + Composer):
+
+```sh
+docker compose build
+docker compose run --rm dev composer install
+docker compose run --rm dev vendor/bin/phpunit
+```
